@@ -50,6 +50,24 @@ public class ReportBuilderTest {
     }
 
     @Test
+    public void shouldRenderTheFeatureOverviewPageCorrectlyWithHighCharts() throws Exception {
+        File rd = new File(ReportBuilderTest.class.getClassLoader().getResource("net/masterthought/cucumber").toURI());
+        List<String> jsonReports = new ArrayList<String>();
+        jsonReports.add(new File(ReportBuilderTest.class.getClassLoader().getResource("net/masterthought/cucumber/project3.json").toURI()).getAbsolutePath());
+        ReportBuilder reportBuilder = new ReportBuilder(jsonReports, rd, "", "1", "cucumber-reporting", false, false, false, true, false, "", true);
+        reportBuilder.generateReports();
+
+        File input = new File(rd, "feature-overview.html");
+        Document doc = Jsoup.parse(input, "UTF-8", "");
+        assertThat(fromId("overview-title", doc).text(), is("Feature Overview for Build: 1"));
+        assertStatsHeader(doc);
+        assertStatsFirstFeature(doc);
+        assertStatsThirdFeature(doc);
+        assertStatsTotals(doc);
+        assertNotNull(fromId("js-charts", doc));
+    }
+    
+    @Test
     public void shouldRenderTheFeaturePageCorrectly() throws Exception {
         File rd = new File(ReportBuilderTest.class.getClassLoader().getResource("net/masterthought/cucumber").toURI());
         List<String> jsonReports = new ArrayList<String>();

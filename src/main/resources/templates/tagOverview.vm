@@ -462,6 +462,7 @@
                     </tr>
                 #end
 
+                <!-- 
                 <tr>
                     <td style="background-color:lightgray;font-weight:bold;">$total_tags</td>
                     <td style="background-color:lightgray;font-weight:bold;">$total_scenarios</td>
@@ -475,6 +476,7 @@
                     <td style="background-color:lightgray;font-weight:bold;">$total_duration</td>
                     <td style="background-color:lightgray;font-weight:bold;">Totals</td>
                 </tr>
+                 -->
             </table>
         </div>
 
