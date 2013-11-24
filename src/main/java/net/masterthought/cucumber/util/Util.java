@@ -1,19 +1,29 @@
 package net.masterthought.cucumber.util;
 
-import com.googlecode.totallylazy.Sequence;
-import net.masterthought.cucumber.ScenarioTag;
-import net.masterthought.cucumber.json.*;
-import org.joda.time.Period;
-import org.joda.time.format.PeriodFormatter;
-import org.joda.time.format.PeriodFormatterBuilder;
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import net.masterthought.cucumber.ScenarioTag;
+import net.masterthought.cucumber.json.Element;
+import net.masterthought.cucumber.json.Feature;
+import net.masterthought.cucumber.json.Step;
+import net.masterthought.cucumber.json.Tag;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.ArrayUtils;
+import org.joda.time.Period;
+import org.joda.time.format.PeriodFormatter;
+import org.joda.time.format.PeriodFormatterBuilder;
 
 public class Util {
 
@@ -73,12 +83,8 @@ public class Util {
         return !(item.isEmpty() || item == null);
     }
 
-    public static boolean itemExists(List<String> listItem) {
+    public static boolean itemExists(List<?> listItem) {
         return listItem.size() != 0;
-    }
-
-    public static boolean itemExists(Sequence<Element> sequence) {
-        return sequence.size() != 0;
     }
 
     public static boolean itemExists(Tag[] tags) {
@@ -180,5 +186,89 @@ public class Util {
         return !result;
     }
 
+    
+    /**
+     * @return
+     */
+    public static List<String> getTagNames(Tag[] tags) {
+    	if (ArrayUtils.isEmpty(tags)) {
+    		return Collections.emptyList();
+    	}
+    	List<String> tagList = new ArrayList<String>();
+    	for (Tag tag : tags) {
+			tagList.add(tag.getName());
+		}
+        return tagList;
+    }
 
+    /**
+     * Safe conversion of an array to a list
+     *  
+     * @param array
+     * @return
+     */
+    public static <T> List<T> getAsList(T[] array) {
+    	List<T> list;
+    	if (ArrayUtils.isEmpty(array)) {
+    		list = Collections.emptyList();
+    	} else {
+    		list = Arrays.asList(array);
+    	}
+        return list;
+    }
+    
+    
+    /**
+     * Count the number of steps for the given status
+     * 
+     * @param status
+     * @return
+     */
+    public static int countStepWithStatus(Step[] steps, Status status) {
+		if (ArrayUtils.isEmpty(steps)) {
+			return 0;
+		}
+		int sum = 0;
+		for (Step step : steps) {
+			if (status.equals(step.getStatus())) {
+				sum++;
+			}
+		}
+		return sum;
+	}
+    
+    /**
+     * 
+     * @param status
+     * @return
+     */
+    public static boolean hasStatus(Step[] steps, Status status) {
+		if (ArrayUtils.isEmpty(steps)) {
+			return false;
+		}
+		for (Step step : steps) {
+			if (status.equals(step.getStatus())) {
+				return true;
+			}
+		}
+		return false;
+	}
+    
+    /**
+     * 
+     * @param status
+     * @return
+     */
+    public static boolean hasStatus(List<Element> elements, Status status) {
+		if (CollectionUtils.isEmpty(elements)) {
+			return false;
+		}
+		for (Element element : elements) {
+			if (status.equals(element.getStatus())) {
+				return true;
+			}
+		}
+		return false;
+	}
+    
 }

@@ -34,10 +34,10 @@ public class StepTest {
         Feature failingFeature = reportParser.getFeatures().entrySet().iterator().next().getValue().get(1);
         passingFeature.processSteps();
         failingFeature.processSteps();
-        passingStep = passingFeature.getElements().first().getSteps().first();
-        failingStep = failingFeature.getElements().first().getSteps().get(5);
-        skippedStep = failingFeature.getElements().first().getSteps().get(6);
-        withOutput = passingFeature.getElements().get(1).getSteps().first();
+        passingStep = passingFeature.getElements().get(0).getSteps().get(0);
+        failingStep = failingFeature.getElements().get(0).getSteps().get(5);
+        skippedStep = failingFeature.getElements().get(0).getSteps().get(6);
+        withOutput = passingFeature.getElements().get(1).getSteps().get(0);
     }
 
     @Test

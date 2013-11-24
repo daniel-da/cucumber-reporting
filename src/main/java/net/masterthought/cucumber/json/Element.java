@@ -1,18 +1,12 @@
 package net.masterthought.cucumber.json;
 
-import com.googlecode.totallylazy.Function1;
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequences;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.masterthought.cucumber.ConfigurationOptions;
 import net.masterthought.cucumber.util.Util;
 
 import org.apache.commons.lang.StringUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.googlecode.totallylazy.Option.option;
 
 public class Element {
 
@@ -26,30 +20,35 @@ public class Element {
 
     }
 
-    public Sequence<Step> getSteps() {
-        return Sequences.sequence(option(steps).getOrElse(new Step[]{})).realise();
+    public List<Step> getSteps() {
+        return Util.getAsList(steps);
     }
 
-    public Sequence<Tag> getTags() {
-        return Sequences.sequence(option(tags).getOrElse(new Tag[]{})).realise();
+    public List<Tag> getTags() {
+        return Util.getAsList(tags);
     }
 
+    /**
+     * 
+     * return the element status depending on step status and configuration
+     * 
+     * @return
+     */
     public Util.Status getStatus() {
-    	// can be optimized to retrieve only the count of elements and not the all list
-        int results = getSteps().filter(Step.predicates.hasStatus(Util.Status.FAILED)).size();
+    	boolean results = Util.hasStatus(steps, Util.Status.FAILED);
         
-        if (results == 0 && ConfigurationOptions.skippedFailsBuild()) {
-        	results = getSteps().filter(Step.predicates.hasStatus(Util.Status.SKIPPED)).size();
+        if (!results && ConfigurationOptions.skippedFailsBuild()) {
+        	results = Util.hasStatus(steps, Util.Status.SKIPPED);
         }
 
-        if (results == 0 && ConfigurationOptions.undefinedFailsBuild()) {
-        	results = getSteps().filter(Step.predicates.hasStatus(Util.Status.UNDEFINED)).size();
+        if (!results && ConfigurationOptions.undefinedFailsBuild()) {
+        	results = Util.hasStatus(steps, Util.Status.UNDEFINED);
         }
         
-        return results == 0 ? Util.Status.PASSED : Util.Status.FAILED;
+        return !results? Util.Status.PASSED : Util.Status.FAILED;
     }
 
-    public String getRawName() {
+	public String getRawName() {
         return name;
     }
 
@@ -71,36 +70,21 @@ public class Element {
         return Util.itemExists(contentString) ? Util.result(getStatus()) + StringUtils.join(contentString.toArray(), " ") + Util.closeDiv() : "";
     }
 
-    public Sequence<String> getTagList() {
-        return processTags();
+    public List<String> getTagList() {
+        return Util.getTagNames(tags);
     }
 
     public boolean hasTags() {
         return Util.itemExists(tags);
     }
 
-    private Sequence<String> processTags() {
-        return getTags().map(Tag.functions.getName());
-    }
-
     public String getTagsList() {
         String result = "<div class=\"feature-tags\"></div>";
         if (Util.itemExists(tags)) {
-            String tagList = StringUtils.join(processTags().toList().toArray(), ",");
+            String tagList = StringUtils.join(Util.getTagNames(tags).toArray(), ",");
             result = "<div class=\"feature-tags\">" + tagList + "</div>";
         }
         return result;
     }
-
-    public static class functions {
-        public static Function1<Element, Util.Status> status() {
-            return new Function1<Element, Util.Status>() {
-                @Override
-                public Util.Status call(Element element) throws Exception {
-                    return element.getStatus();
-                }
-            };
-        }
-    }
-
+    
 }

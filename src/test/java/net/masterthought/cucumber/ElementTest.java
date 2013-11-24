@@ -109,7 +109,7 @@ public class ElementTest {
         expectedList.add("@fast");
         expectedList.add("@super");
         expectedList.add("@checkout");
-        assertThat(taggedElement.getTagList().toList(), is(expectedList));
+        assertThat(taggedElement.getTagList(), is(expectedList));
     }
 
     @Test

@@ -1,13 +1,13 @@
 package net.masterthought.cucumber;
 
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequences;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.masterthought.cucumber.json.Element;
 import net.masterthought.cucumber.json.Step;
 import net.masterthought.cucumber.util.Util;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.apache.commons.collections.ListUtils;
 
 public class TagObject {
 
@@ -123,14 +123,14 @@ public class TagObject {
         return statuses;
     }
 
-    public Sequence<Element> getElements() {
+    public List<Element> getElements() {
+    	// Daniel-DA: we hope that this method is not called twice!
         populateElements();
-        return Sequences.sequence(elements);
+        return ListUtils.unmodifiableList(elements);
     }
 
     public Util.Status getStatus() {
-        Sequence<Util.Status> results = getElements().map(Element.functions.status());
-        return results.contains(Util.Status.FAILED) ? Util.Status.FAILED : Util.Status.PASSED;
+        return Util.hasStatus(elements, Util.Status.FAILED) ? Util.Status.FAILED : Util.Status.PASSED;
     }
 
     public String getRawStatus() {

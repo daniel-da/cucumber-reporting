@@ -1,18 +1,14 @@
 package net.masterthought.cucumber.json;
 
-import com.google.common.base.Joiner;
-import com.google.gson.internal.LinkedTreeMap;
-import com.googlecode.totallylazy.Function1;
-import com.googlecode.totallylazy.Sequences;
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
-import net.masterthought.cucumber.ConfigurationOptions;
-import net.masterthought.cucumber.util.Util;
+import static org.apache.commons.lang.StringUtils.EMPTY;
 
 import java.util.List;
 import java.util.UUID;
 
-import static com.googlecode.totallylazy.Option.option;
-import static org.apache.commons.lang.StringUtils.EMPTY;
+import net.masterthought.cucumber.util.Util;
+
+import com.google.common.base.Joiner;
+import com.google.gson.internal.LinkedTreeMap;
 
 public class Step {
 
@@ -39,7 +35,7 @@ public class Step {
     }
 
     public String getOutput() {
-        List<String> outputList = Sequences.sequence(option(output).getOrElse(new String[]{})).realise().toList();
+        List<String> outputList = Util.getAsList(output);
         return Joiner.on("").skipNulls().join(outputList);
     }
 
@@ -178,41 +174,10 @@ public class Step {
         return "data:image/png;base64," + ((LinkedTreeMap) image).get("data");
 
     }
+    
+    
     public static String uuidForImage(Object image){
         return UUID.nameUUIDFromBytes(mimeEncodeEmbededImage(image).getBytes()).toString();
-    }
-
-    public static class functions {
-        public static Function1<Step, Util.Status> status() {
-            return new Function1<Step, Util.Status>() {
-                @Override
-                public Util.Status call(Step step) throws Exception {
-                    return step.getStatus();
-                }
-            };
-        }
-    }
-
-    public static class predicates {
-
-        public static LogicalPredicate<Step> hasStatus(final Util.Status status) {
-            return new LogicalPredicate<Step>() {
-                @Override
-                public boolean matches(Step step) {
-                    return step.getStatus().equals(status);
-                }
-            };
-        }
-
-
-        public static Function1<Step, Util.Status> status() {
-            return new Function1<Step, Util.Status>() {
-                @Override
-                public Util.Status call(Step step) throws Exception {
-                    return step.getStatus();
-                }
-            };
-        }
     }
 
 }

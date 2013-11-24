@@ -51,7 +51,7 @@ public class FeatureTest {
     public void shouldListTheTags() {
         List<String> expectedList = new ArrayList<String>();
         expectedList.add("@super");
-        assertThat(passingFeature.getTagList().toList(), is(expectedList));
+        assertThat(passingFeature.getTagList(), is(expectedList));
     }
 
     @Test

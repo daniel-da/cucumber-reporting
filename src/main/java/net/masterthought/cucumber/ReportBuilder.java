@@ -56,7 +56,8 @@ public class ReportBuilder {
         } catch (Exception exception) {
             parsingError = true;
             generateErrorPage(exception);
-            System.out.println(exception);
+//            System.out.println(exception);
+            exception.printStackTrace();
         }
     }
 
@@ -103,7 +104,7 @@ public class ReportBuilder {
                 context.put("report_status_colour", ri.getReportStatusColour(feature));
                 context.put("build_project", buildProject);
                 context.put("build_number", buildNumber);
-                context.put("scenarios", feature.getElements().toList());
+                context.put("scenarios", feature.getElements());
                 context.put("time_stamp", ri.timeStamp());
                 context.put("jenkins_base", pluginUrlPath);
                 context.put("fromJenkins", runWithJenkins);
