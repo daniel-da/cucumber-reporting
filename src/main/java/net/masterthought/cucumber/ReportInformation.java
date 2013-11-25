@@ -12,6 +12,7 @@ import net.masterthought.cucumber.json.Element;
 import net.masterthought.cucumber.json.Feature;
 import net.masterthought.cucumber.json.Step;
 import net.masterthought.cucumber.util.Util;
+import net.masterthought.cucumber.util.Util.Status;
 
 public class ReportInformation {
 
@@ -37,7 +38,8 @@ public class ReportInformation {
     private long totalTagDuration = 0l;
     private int totalPassingTagScenarios = 0;
     private int totalFailingTagScenarios = 0;
-
+	private Status status = Util.Status.PASSED; 
+	
     public ReportInformation(Map<String, List<Feature>> projectFeatureMap) {
         this.projectFeatureMap = projectFeatureMap;
         this.features = listAllFeatures();
@@ -167,6 +169,10 @@ public class ReportInformation {
         return numberFailingScenarios.size();
     }
 
+	public Status getStatus() {
+		return status;
+	}
+
     private void processTags() {
         for (TagObject tag : tagMap) {
             totalTagScenarios = calculateTotalTagScenarios(tag);
@@ -217,7 +223,10 @@ public class ReportInformation {
     }
 
     private void processFeatures() {
-        for (Feature feature : features) {
+    	for (Feature feature : features) {
+    		if (feature.getStatus() == Util.Status.FAILED) {
+    			status = Util.Status.FAILED;
+    		}
             List<ScenarioTag> scenarioList = new ArrayList<ScenarioTag>();
             List<Element> scenarios = feature.getElements();
             if (Util.itemExists(scenarios)) {
@@ -348,6 +357,5 @@ public class ReportInformation {
         }
         return tagMap;
     }
-
 
 }

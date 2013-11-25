@@ -1,19 +1,30 @@
 package net.masterthought.cucumber;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
 import net.masterthought.cucumber.charts.FlashChartBuilder;
 import net.masterthought.cucumber.charts.JsChartUtil;
 import net.masterthought.cucumber.json.Feature;
 import net.masterthought.cucumber.util.UnzipUtils;
+import net.masterthought.cucumber.util.Util;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
-
-import java.io.*;
-import java.net.URISyntaxException;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 public class ReportBuilder {
 
@@ -62,7 +73,7 @@ public class ReportBuilder {
     }
 
     public boolean getBuildStatus() {
-        return !(ri.getTotalNumberFailingSteps() > 0);
+        return ri.getStatus() == Util.Status.PASSED;
     }
 
     public void generateReports() throws Exception {
