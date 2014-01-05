@@ -165,7 +165,7 @@ table.data-table td {
                 <div style="margin-bottom:20px;padding:15px;">
                     <div><a href="$scenario.getParentFeatureUri()">View Feature File</a></div>
                 $scenario.getScenario().getName()
-                #foreach($step in $scenario.getScenario().getSteps().toList())
+                #foreach($step in $scenario.getScenario().getSteps())
                   $step.getName()
                     #if($step.hasRows())
                         <div class="data $step.getDataTableClass()">
