@@ -29,7 +29,7 @@ public class Feature {
     }
 
     public List<Element> getElements() {
-        return Arrays.asList(elements);
+        return Util.getAsList(elements);
     }
 
     public String getFileName() {
@@ -70,12 +70,14 @@ public class Feature {
 
     public Util.Status getStatus() {
     	Status status = Util.Status.PASSED;
-        for (Element element : elements) {
-			if (Util.Status.FAILED.equals(element.getStatus())) {
-				status = Util.Status.FAILED;
-				break;
-			}
- 		}
+    	if (Util.itemExists(elements)) {
+    		for (Element element : elements) {
+    			if (Util.Status.FAILED.equals(element.getStatus())) {
+    				status = Util.Status.FAILED;
+    				break;
+    			}
+    		}
+    	}
         return status;
     }
 

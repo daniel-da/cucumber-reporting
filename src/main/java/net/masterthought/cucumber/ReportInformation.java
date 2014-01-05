@@ -3,7 +3,6 @@ package net.masterthought.cucumber;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +15,6 @@ import net.masterthought.cucumber.util.Util.Status;
 
 public class ReportInformation {
 
-    private Map<String, List<Feature>> projectFeatureMap;
     private List<Feature> features;
     private int numberOfScenarios;
     private int numberOfSteps;
@@ -41,19 +39,15 @@ public class ReportInformation {
 	private Status status = Util.Status.PASSED; 
 	
     public ReportInformation(Map<String, List<Feature>> projectFeatureMap) {
-        this.projectFeatureMap = projectFeatureMap;
-        this.features = listAllFeatures();
+        this.features = listAllFeatures(projectFeatureMap);
         processFeatures();
     }
 
-    private List<Feature> listAllFeatures() {
+    private List<Feature> listAllFeatures(Map<String, List<Feature>> projectFeatureMap) {
         List<Feature> allFeatures = new ArrayList<Feature>();
-        Iterator it = projectFeatureMap.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pairs = (Map.Entry) it.next();
-            List<Feature> featureList = (List<Feature>) pairs.getValue();
-            allFeatures.addAll(featureList);
-        }
+        for (List<Feature> featureList : projectFeatureMap.values()) {
+        	allFeatures.addAll(featureList);
+		}
         return allFeatures;
     }
 
@@ -63,10 +57,6 @@ public class ReportInformation {
 
     public List<TagObject> getTags() {
         return this.tagMap;
-    }
-
-    public Map<String, List<Feature>> getProjectFeatureMap() {
-        return this.projectFeatureMap;
     }
 
     public int getTotalNumberOfScenarios() {
@@ -187,14 +177,11 @@ public class ReportInformation {
             for (ScenarioTag scenarioTag : tag.getScenarios()) {
 
                 if (Util.hasSteps(scenarioTag)) {
-                	// Daniel-DA: Still conversion needed??
                     List<Step> steps = scenarioTag.getScenario().getSteps();
-                    List<Step> stepList = new ArrayList<Step>();
                     for (Step step : steps) {
-                        stepList.add(step);
-                        totalTagDuration = totalTagDuration + step.getDuration();
+                        totalTagDuration += step.getDuration();
                     }
-                    totalTagSteps += stepList.size();
+                    totalTagSteps += steps.size();
                 }
             }
         }

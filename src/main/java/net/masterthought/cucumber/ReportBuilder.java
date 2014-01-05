@@ -100,29 +100,23 @@ public class ReportBuilder {
     }
 
     public void generateFeatureReports() throws Exception {
-        Iterator it = ri.getProjectFeatureMap().entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pairs = (Map.Entry) it.next();
-            List<Feature> featureList = (List<Feature>) pairs.getValue();
-
-            for (Feature feature : featureList) {
-                VelocityEngine ve = new VelocityEngine();
-                ve.init(getProperties());
-                Template featureResult = ve.getTemplate("templates/featureReport.vm");
-                VelocityContext context = new VelocityContext();
-                context.put("version", VERSION);
-                context.put("feature", feature);
-                context.put("report_status_colour", ri.getReportStatusColour(feature));
-                context.put("build_project", buildProject);
-                context.put("build_number", buildNumber);
-                context.put("scenarios", feature.getElements());
-                context.put("time_stamp", ri.timeStamp());
-                context.put("jenkins_base", pluginUrlPath);
-                context.put("fromJenkins", runWithJenkins);
-                context.put("artifactsEnabled", ConfigurationOptions.artifactsEnabled());
-                generateReport(feature.getFileName(), featureResult, context);
-            }
-        }
+    	for (Feature feature : ri.getFeatures()) {
+    		VelocityEngine ve = new VelocityEngine();
+    		ve.init(getProperties());
+    		Template featureResult = ve.getTemplate("templates/featureReport.vm");
+    		VelocityContext context = new VelocityContext();
+    		context.put("version", VERSION);
+    		context.put("feature", feature);
+    		context.put("report_status_colour", ri.getReportStatusColour(feature));
+    		context.put("build_project", buildProject);
+    		context.put("build_number", buildNumber);
+    		context.put("scenarios", feature.getElements());
+    		context.put("time_stamp", ri.timeStamp());
+    		context.put("jenkins_base", pluginUrlPath);
+    		context.put("fromJenkins", runWithJenkins);
+    		context.put("artifactsEnabled", ConfigurationOptions.artifactsEnabled());
+    		generateReport(feature.getFileName(), featureResult, context);
+    	}
     }
 
     private void generateFeatureOverview() throws Exception {

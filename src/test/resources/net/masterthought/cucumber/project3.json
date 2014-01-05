@@ -1233,5 +1233,12 @@
             }
         ],
         "uri":"net/masterthought/example/ATMK.feature"
+    },
+    {
+        "id":"ignored Feature",
+        "description":"As an Account Holder\nI want to withdraw cash from an ATM\nSo that I can get money when the bank is closed",
+        "name":"Account Holder withdraws More Cash with skipped steps",
+        "keyword":"Feature",
+        "uri":"net/masterthought/example/ignored.feature"
     }
 ]

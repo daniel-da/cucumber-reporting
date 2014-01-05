@@ -56,13 +56,6 @@ public class ReportInformationTest {
     }
 
     @Test
-    public void shouldListFeaturesInAMap() {
-	//not really needed now -- have type safety with generics in object usage and would have failed had we not found the resource.
-        assertThat(reportInformation.getProjectFeatureMap().keySet(), hasItem(containsString("project1.json")));
-        assertThat(reportInformation.getProjectFeatureMap().entrySet().iterator().next().getValue().get(0), is(Feature.class));
-    }
-
-    @Test
     public void shouldReturnTotalNumberOfScenarios() {
         assertThat(reportInformation.getTotalNumberOfScenarios(), is(10));
     }
