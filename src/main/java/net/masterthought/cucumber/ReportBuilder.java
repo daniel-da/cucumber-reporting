@@ -25,6 +25,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.tools.generic.EscapeTool;
 
 public class ReportBuilder {
 
@@ -115,7 +116,8 @@ public class ReportBuilder {
     		context.put("jenkins_base", pluginUrlPath);
     		context.put("fromJenkins", runWithJenkins);
     		context.put("artifactsEnabled", ConfigurationOptions.artifactsEnabled());
-    		generateReport(feature.getFileName(), featureResult, context);
+    		context.put("esc", new EscapeTool());
+            generateReport(feature.getFileName(), featureResult, context);
     	}
     }
 
