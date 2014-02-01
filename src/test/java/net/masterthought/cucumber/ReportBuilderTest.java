@@ -153,7 +153,7 @@ public class ReportBuilderTest {
     }
     
     private void assertStatsTotals(Document doc) {
-        assertThat("stats-total-features", fromId("stats-total-features", doc).text(), is("4"));
+        assertThat("stats-total-features", fromId("stats-total-features", doc).text(), is("5"));
         assertThat("stats-total-scenarios", fromId("stats-total-scenarios", doc).text(), is("7"));
         assertThat("stats-total-scenarios-passed", fromId("stats-total-scenarios-passed", doc).text(), is("6"));
         assertThat("stats-total-scenarios-failed", fromId("stats-total-scenarios-failed", doc).text(), is("1"));
