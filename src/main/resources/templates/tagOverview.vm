@@ -417,6 +417,7 @@
             <h2>Tag Statistics</h2>
             <table class="stats-table">
                 #include("/templates/tableHeader.vm")
+                #include("/templates/tagTableHeader.vm")
                 #foreach($tag in $tags)
 
                     #if($tag.getStatus().toString() == "PASSED")

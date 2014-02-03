@@ -177,6 +177,7 @@ table.data-table td {
             <div>
                 <table class="stats-table">
                     #include("/templates/tableHeader.vm")
+                    #include("/templates/featureTableHeader.vm")
                     #set($sf = $feature.getRawName())
 
                     <tr>
